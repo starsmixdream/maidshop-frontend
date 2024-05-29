@@ -17,7 +17,10 @@
           <el-input v-model="form.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
       </el-form>
-      <el-button id="loginButton" @click="login()">登录</el-button>
+      <div id="">
+        <el-button @click="login()" id="loginButton1">登录</el-button>
+        <el-button @click="register()" id="loginButton2">注册</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -38,12 +41,27 @@ export default {
     async login() {
       const resp = await axios.get(`/user/login?nickname=${this.form.nickname}&password=${this.form.password}`);
       if (resp.data.code === 0) {
-        console.log('11111111')
         await this.$router.push('/anima').catch(err => {
           throw err;
         });
       } else {
         alert('账户或密码错误')
+      }
+    },
+    async register() {
+      const resp = await axios.post('/user/register',{},{
+        params: {
+          nickname: this.form.nickname,
+          password: this.form.password
+        }
+      });
+      if (resp.data.code === 0) {
+        alert('注册成功');
+        await this.$router.push('/anima').catch(err => {
+          throw err;
+        });
+      } else {
+        alert(resp.data.message)
       }
     }
   }
@@ -51,6 +69,7 @@ export default {
 </script>
 <style scoped>
 .body {
+  font-family: 华文楷体,serif;
   background-image: url("../assets/nanbird.jpg");
   background-size: cover;
   background-position: center;
@@ -64,9 +83,17 @@ export default {
   height: 100px;
 }
 
-#loginButton {
+#loginButton1 {
   background-color: pink;
   margin-left: 700px;
+  border-radius: 50px;
+  opacity: 0.8;
+  //margin-right: 100px;
+}
+
+#loginButton2 {
+  background-color: pink;
+  margin-left: 50px;
   border-radius: 50px;
   opacity: 0.8;
   //margin-right: 100px;
